@@ -132,7 +132,7 @@
             backdrop-filter: blur(12px);
             border-radius: 32px 0 0 32px;
             padding: 1.8rem 1.8rem 2rem;
-            max-width: 400px;
+            max-width: 420px;
             width: 100%;
             position: fixed;
             top: 0;
@@ -171,11 +171,21 @@
         }
         .cart-item {
             display: flex;
-            justify-content: space-between;
             align-items: center;
             padding: 0.8rem 0;
             border-bottom: 1px solid #f0e8ff;
-            gap: 8px;
+            gap: 12px;
+        }
+        .cart-item-img {
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            background: linear-gradient(145deg, #faf3ff, #f0e6ff);
+            flex-shrink: 0;
         }
         .cart-item-info {
             flex: 1;
@@ -431,7 +441,7 @@
     </div>
 
     <script>
-        // ----- PRODUCT DATA (colorful clothes) -----
+        // ----- PRODUCT DATA (colorful clothes) with image emojis -----
         const products = [
             { id: 1, name: 'Neon Dream Tee', price: 34.99, emoji: '👕', colors: ['#ff6b9d', '#b05cff', '#00d4ff'] },
             { id: 2, name: 'Sunset Cargo', price: 49.99, emoji: '👖', colors: ['#ff9a56', '#ff6b6b', '#feca57'] },
@@ -488,7 +498,6 @@
                 cart.push({ ...product, quantity: 1 });
             }
             updateCartUI();
-            // open cart panel after add (optional)
             openCart();
         }
 
@@ -517,14 +526,12 @@
         }
 
         function updateCartUI() {
-            // update count & total in header
             const totalItems = getTotalItems();
             const totalPrice = getTotalPrice();
             cartCount.textContent = totalItems;
             cartTotal.textContent = `$${totalPrice.toFixed(2)}`;
             cartPanelTotal.textContent = `$${totalPrice.toFixed(2)}`;
 
-            // render cart items
             if (cart.length === 0) {
                 cartItemsEl.innerHTML = `<li class="cart-empty">🛍️ your cart is empty</li>`;
                 return;
@@ -532,8 +539,9 @@
 
             cartItemsEl.innerHTML = cart.map(item => `
                 <li class="cart-item">
+                    <div class="cart-item-img">${item.emoji}</div>
                     <div class="cart-item-info">
-                        <div class="cart-item-name">${item.emoji} ${item.name}</div>
+                        <div class="cart-item-name">${item.name}</div>
                         <div class="cart-item-price">$${item.price.toFixed(2)}</div>
                     </div>
                     <div class="cart-item-qty">
@@ -545,7 +553,6 @@
                 </li>
             `).join('');
 
-            // attach qty events
             cartItemsEl.querySelectorAll('[data-delta]').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const id = parseInt(btn.dataset.id);
@@ -579,7 +586,7 @@
         renderProducts();
         updateCartUI();
 
-        // small extra: checkout alert
+        // checkout alert
         document.querySelector('.checkout-btn').addEventListener('click', () => {
             if (cart.length === 0) {
                 alert('🛒 Your cart is empty! Add some colorful clothes.');
@@ -588,7 +595,7 @@
             }
         });
 
-        // search (filter demo)
+        // search filter
         document.querySelector('.search-wrap button').addEventListener('click', () => {
             const query = document.querySelector('.search-wrap input').value.toLowerCase().trim();
             const cards = document.querySelectorAll('.product-card');
